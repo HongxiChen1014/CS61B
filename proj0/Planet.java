@@ -4,7 +4,7 @@
  * @create 2021-11-22-21:34
  */
 public class Planet {
-    public double G = 6.67e-11;
+    private double G = 6.67e-11;
     public double xxPos;
     public double yyPos;
     public double xxVel;
