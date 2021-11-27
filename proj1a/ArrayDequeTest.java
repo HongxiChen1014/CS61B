@@ -39,5 +39,25 @@ public class ArrayDequeTest {
         int a = arr1.removeLast();
         assertEquals(0, a);
     }
-    
+
+    @Test
+    public void testGet() {
+        ArrayDeque<Integer> arr1 = new ArrayDeque<>();
+        arr1.addFirst(0);
+        arr1.addFirst(1);
+        arr1.addLast(2);
+        int m = arr1.get(2);
+        assertEquals(2, m);
+    }
+
+    @Test
+    public void testAddFirst2() {
+        ArrayDeque<Integer> arr1 = new ArrayDeque<>();
+        arr1.addFirst(0);
+        arr1.addFirst(1);
+        assertEquals(0, (int) arr1.removeLast());
+        assertEquals(1, (int) arr1.removeLast());
+        arr1.removeLast();
+        assertEquals(true, arr1.isEmpty());
+    }
 }

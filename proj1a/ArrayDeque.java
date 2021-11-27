@@ -108,6 +108,7 @@ public class ArrayDeque<T> {
             return null;
         }
         T temp = t[front];
+        t[front] = null;
         front = (front + contain + 1) % contain;
         size--;
         if (size == 0) {
@@ -118,7 +119,6 @@ public class ArrayDeque<T> {
         if (size >= 16 && actualUsage < usage) {
             shortArray();
         }
-
         return temp;
     }
 
@@ -127,6 +127,7 @@ public class ArrayDeque<T> {
             return null;
         }
         T temp = t[end];
+        t[end] = null;
         end = (end + contain - 1) % contain;
         size--;
         if (size == 0) {
@@ -146,7 +147,7 @@ public class ArrayDeque<T> {
         } else if (front + index < contain) {
             return t[front + index];
         } else {
-            return t[contain - front - 1 + index];
+            return t[index - contain + front];
         }
     }
 }
