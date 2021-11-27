@@ -5,9 +5,9 @@
  */
 public class LinkedListDeque<T> {
     private static class LinkedList<T> {
-        public T first;
-        public LinkedList<T> prev;
-        public LinkedList<T> next;
+        private T first;
+        private LinkedList<T> prev;
+        private LinkedList<T> next;
 
         public LinkedList(T i) {
             first = i;
@@ -26,7 +26,7 @@ public class LinkedListDeque<T> {
         t = null;
     }
 
-    public void notNull(T item) {
+    private void notNull(T item) {
         t = new LinkedList<T>(item);
         numFirst = t;
         numLast = t;
@@ -71,7 +71,7 @@ public class LinkedListDeque<T> {
         }
     }
 
-    public void isNull() {
+    private void isNull() {
         t = null;
         numLast = null;
         numFirst = null;

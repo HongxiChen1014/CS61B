@@ -10,7 +10,7 @@ public class ArrayDeque<T> {
     private int size = 0;
     private int front = -1; //front pointer
     private int end = -1; // end pointer
-    public int contain = 8;
+    private int contain = 8;
     private double usage = 0.25; //usage Factor
 
     public ArrayDeque() {
@@ -111,7 +111,7 @@ public class ArrayDeque<T> {
             end = -1;
         }
         double actualUsage = size / contain;
-        if (actualUsage < usage) {
+        if (size != 0 && actualUsage < usage) {
             shortArray();
         }
 
@@ -127,7 +127,7 @@ public class ArrayDeque<T> {
             end = -1;
         }
         double actualUsage = size / contain;
-        if (actualUsage < usage) {
+        if (size != 0 && actualUsage < usage) {
             shortArray();
         }
         return temp;
