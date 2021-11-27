@@ -64,14 +64,13 @@ public class ArrayDequeTest {
     @Test
     public void test3() {
         ArrayDeque<Integer> arr1 = new ArrayDeque<>();
-        for (int i = 0; i < 63; i++) {
+        for (int i = 0; i < 64; i++) {
             arr1.addLast(i);
         }
-        for (int i = 0; i < 62; i++) {
+        for (int i = 0; i < 63; i++) {
             arr1.removeFirst();
         }
-        System.out.println(arr1.size());
-        System.out.println(arr1.contain);
+
     }
 
 
