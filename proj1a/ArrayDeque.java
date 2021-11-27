@@ -7,17 +7,13 @@ public class ArrayDeque<T> {
 
 
     private T[] t;
-    private int size;
-    private int front; //front pointer
-    private int end; // end pointer
-    private int contain;
+    private int size = 0;
+    private int front = -1; //front pointer
+    private int end = -1; // end pointer
+    private int contain = 8;
     private double usage = 0.25; //usage Factor
 
     public ArrayDeque() {
-        contain = 8;
-        front = -1;
-        end = -1;
-        size = 0;
         t = (T[]) new Object[contain];
     }
 
@@ -60,8 +56,9 @@ public class ArrayDeque<T> {
     public void addFirst(T item) {
         if (size == 0) {
             implementEmpty();
+        } else {
+            front = helperfront(front);
         }
-        front = helperfront(front);
         t[front] = item;
         size++;
         if (size == contain) {
@@ -73,10 +70,11 @@ public class ArrayDeque<T> {
     public void addLast(T item) {
         if (size == 0) {
             implementEmpty();
+        } else {
+            end = helperend(end);
         }
         t[end] = item;
         size++;
-        end = helperend(end);
         if (size == contain) {
             extendArray();
         }
@@ -99,6 +97,7 @@ public class ArrayDeque<T> {
         }
         System.out.println();
     }
+
 
     public T removeFirst() {
         if (size == 0) {
