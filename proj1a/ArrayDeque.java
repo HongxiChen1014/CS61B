@@ -44,7 +44,7 @@ public class ArrayDeque<T> {
     }
 
     private void shortArray() {
-        contain = contain / 2;
+        contain = (size + 1) * 2;
         t = reformat();
     }
 
@@ -107,13 +107,14 @@ public class ArrayDeque<T> {
         if (size == 0) {
             return null;
         }
-        T temp = t[front];
+        T temp = get(0);
         t[front] = null;
-        front = (front + contain + 1) % contain;
         size--;
         if (size == 0) {
             front = -1;
             end = -1;
+        } else {
+            front = (front + contain + 1) % contain;
         }
         double actualUsage = (double) size / (double) contain;
         if (size >= 16 && actualUsage < usage) {
@@ -126,7 +127,7 @@ public class ArrayDeque<T> {
         if (size == 0) {
             return null;
         }
-        T temp = t[end];
+        T temp = get(size - 1);
         t[end] = null;
         end = (end + contain - 1) % contain;
         size--;
