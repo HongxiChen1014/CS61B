@@ -1,154 +1,154 @@
 /**
  * @author daisy
  * @description
- * @create 2021-11-26-14:42
+ * @create 2021-11-26-23:46
  */
+
+import java.text.DecimalFormat;
+
 public class ArrayDeque<T> {
-
-
-    private T[] t;
-    private int size = 0;
-    private int front = -1; //front pointer
-    private int end = -1; // end pointer
-    private int contain = 8;
-    private double usage = 0.25; //usage Factor
+    private T[] items;
+    private int size;  // the size of the array currently available
+    private double usageFactor = 0.25;
+    private int fp;    // front pointer
+    private int ep;    // end pointer
+    private int num;   // current length
 
     public ArrayDeque() {
-        t = (T[]) new Object[contain];
+        items = (T[]) new Object[8];
+        size = 8;
+        fp = -1;
+        ep = -1;
+        num = 0;
     }
 
-    private int helperfront(int x) {
-        return (x + contain - 1) % contain;
-    }
-
-    private int helperend(int x) {
-        return (x + contain + 1) % contain;
-    }
-
-    private T[] reformat() {
-        T[] temp = (T[]) new Object[contain];
-        if (front < end) {
-            System.arraycopy(t, front, temp, 0, size);
+    private int incPointer(int pointer) {
+        if (pointer == size - 1) {
+            pointer = 0;
         } else {
-            System.arraycopy(t, front, temp, 0, size - front);
-            System.arraycopy(t, 0, temp, size - front, end + 1);
-            front = 0;
-            end = size - 1;
+            pointer += 1;
         }
-        return temp;
+        return pointer;
     }
 
-    private void extendArray() {
-        contain = 2 * contain;
-        t = reformat();
-    }
-
-    private void shortArray() {
-        contain = (size + 1) * 2;
-        t = reformat();
-    }
-
-    private void implementEmpty() {
-        front = 0;
-        end = 0;
+    private int decPointer(int pointer) {
+        if (pointer == 0) {
+            pointer = size - 1;
+        } else {
+            pointer -= 1;
+        }
+        return pointer;
     }
 
     public void addFirst(T item) {
-        if (size == 0) {
-            implementEmpty();
-        } else {
-            front = helperfront(front);
+        if (fp < 0) {
+            fp = 0;
+            ep = 0;
         }
-        t[front] = item;
-        size++;
-        if (size == contain) {
-            extendArray();
+        fp = decPointer(fp);
+        items[fp] = item;
+        num += 1;
+        if (fp == ep) {
+            resize(size * 2);
         }
-
     }
 
     public void addLast(T item) {
-        if (size == 0) {
-            implementEmpty();
-        } else {
-            end = helperend(end);
+        if (fp < 0) {
+            fp = 0;
+            ep = 0;
         }
-        t[end] = item;
-        size++;
-        if (size == contain) {
-            extendArray();
-        }
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    public int size() {
-        return size;
-    }
-
-    public void printDeque() {
-        if (front <= end) {
-            for (int i = front; i <= end; i++) {
-                System.out.print(t[i] + " ");
-            }
-        } else {
-            for (int i = front; i < contain; i++) {
-                System.out.print(t[i] + " ");
-            }
-            for (int i = 0; i <= end; i++) {
-                System.out.print(t[i] + " ");
-            }
+        items[ep] = item;
+        ep = incPointer(ep);
+        num += 1;
+        if (fp == ep) {
+            resize(size * 2);
         }
     }
 
     public T removeFirst() {
-        if (size == 0) {
+        if (num == 0) {
             return null;
         }
-        T temp = get(0);
-        t[front] = null;
-        size--;
-        if (size == 0) {
-            front = -1;
-            end = -1;
+        T ret = get(0);
+        items[fp] = null;
+        num -= 1;
+        if (num == 0) {
+            fp = -1;
+            ep = -1;
         } else {
-            front = (front + contain + 1) % contain;
+            fp = incPointer(fp);
         }
-        double actualUsage = (double) size / (double) contain;
-        if (size >= 16 && actualUsage < usage) {
-            shortArray();
+        DecimalFormat df = new DecimalFormat("0.0000");
+        if (size >= 16 && Float.parseFloat(df.format((float) num / size)) < usageFactor) {
+            resize(appropriateSize(num));
         }
-        return temp;
+        return ret;
     }
 
     public T removeLast() {
-        if (size == 0) {
+        if (num == 0) {
             return null;
         }
-        T temp = get(size - 1);
-        t[end] = null;
-        end = (end + contain - 1) % contain;
-        size--;
-        if (size == 0) {
-            front = -1;
-            end = -1;
+        T ret = get(num - 1);
+        num -= 1;
+        ep = decPointer(ep);
+        items[ep] = null;
+        if (num == 0) {
+            fp = -1;
+            ep = -1;
         }
-        double actualUsage = (double) size / (double) contain;
-        if (size >= 16 && actualUsage < usage) {
-            shortArray();
+        DecimalFormat df = new DecimalFormat("0.0000");
+        if (size >= 16 && Float.parseFloat(df.format((float) num / size)) < usageFactor) {
+            resize(appropriateSize(num));
         }
-        return temp;
+        return ret;
+    }
+
+    public int size() {
+        return num;
+    }
+
+    public boolean isEmpty() {
+        return (num == 0);
     }
 
     public T get(int index) {
-        if (index >= size || index < 0) {
+        if (index >= num || index < 0) {
             return null;
-        } else if (front + index < contain) {
-            return t[front + index];
-        } else {
-            return t[index - contain + front];
         }
+        if (fp <= size - 1 - index) {
+            return items[fp + index];
+        } else {
+            return items[fp + index - size];
+        }
+    }
+
+    public void printDeque() {
+        for (int i = 0; i < num; i++) {
+            System.out.print(get(i));
+            if (i != num - 1) {
+                System.out.print(" ");
+            }
+        }
+        System.out.println();
+    }
+
+    private void resize(int newSize) {
+        T[] a = (T[]) new Object[newSize];
+        if (num + fp <= size) {
+            System.arraycopy(items, fp, a, 0, num);
+        } else {
+            System.arraycopy(items, fp, a, 0, size - fp);
+            System.arraycopy(items, 0, a, size - fp, num - size + fp);
+        }
+        fp = 0;
+        ep = num;
+        size = newSize;
+        items = a;
+    }
+
+    private int appropriateSize(int number) {
+        return (number + 1) * 2;
     }
 }
