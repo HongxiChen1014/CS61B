@@ -62,7 +62,7 @@ public class ArrayDequeTest {
     }
 
     @Test
-    public void test3() {
+    public void testContain() {
         ArrayDeque<Integer> arr1 = new ArrayDeque<>();
         for (int i = 0; i < 64; i++) {
             arr1.addLast(i);
@@ -70,8 +70,5 @@ public class ArrayDequeTest {
         for (int i = 0; i < 63; i++) {
             arr1.removeFirst();
         }
-
     }
-
-
 }

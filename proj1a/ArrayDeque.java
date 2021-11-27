@@ -113,7 +113,7 @@ public class ArrayDeque<T> {
             front = (front + contain + 1) % contain;
         }
         double actualUsage = (double) size / (double) contain;
-        if (contain >= 16 && actualUsage < usage) {
+        if (contain >= 16 && size != 0 && actualUsage < usage) {
             shortArray();
         }
         return temp;
@@ -132,14 +132,14 @@ public class ArrayDeque<T> {
             end = -1;
         }
         double actualUsage = (double) size / (double) contain;
-        if (contain >= 16 && actualUsage < usage) {
+        if (contain >= 16 && size != 0 && actualUsage < usage) {
             shortArray();
         }
         return temp;
     }
 
     public T get(int index) {
-        if (index >= size || index < 0) {
+        if (index >= size || index < 0 || front < 0) {
             return null;
         } else if (front + index < contain) {
             return t[front + index];
