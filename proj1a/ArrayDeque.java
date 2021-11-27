@@ -1,154 +1,151 @@
 /**
  * @author daisy
  * @description
- * @create 2021-11-26-23:46
+ * @create 2021-11-26-14:42
  */
-
-import java.text.DecimalFormat;
-
 public class ArrayDeque<T> {
-    private T[] items;
-    private int size;  // the size of the array currently available
-    private double usageFactor = 0.25;
-    private int fp;    // front pointer
-    private int ep;    // end pointer
-    private int num;   // current length
+
+
+    private T[] t;
+    private int size;
+    private int front; //front pointer
+    private int end; // end pointer
+    private int contain;
+    private double usage = 0.25; //usage Factor
 
     public ArrayDeque() {
-        items = (T[]) new Object[8];
-        size = 8;
-        fp = -1;
-        ep = -1;
-        num = 0;
+        contain = 8;
+        front = -1;
+        end = -1;
+        size = 0;
+        t = (T[]) new Object[contain];
     }
 
-    private int incPointer(int pointer) {
-        if (pointer == size - 1) {
-            pointer = 0;
-        } else {
-            pointer += 1;
-        }
-        return pointer;
+    private int helperfront(int x) {
+        return (x + contain - 1) % contain;
     }
 
-    private int decPointer(int pointer) {
-        if (pointer == 0) {
-            pointer = size - 1;
+    private int helperend(int x) {
+        return (x + contain + 1) % contain;
+    }
+
+    private T[] reformat() {
+        T[] temp = (T[]) new Object[contain];
+        if (front < end) {
+            System.arraycopy(t, front, temp, 0, size);
         } else {
-            pointer -= 1;
+            System.arraycopy(t, front, temp, 0, size - front);
+            System.arraycopy(t, 0, temp, size - front, end + 1);
+            front = 0;
+            end = size - 1;
         }
-        return pointer;
+        return temp;
+    }
+
+    private void extendArray() {
+        contain = 2 * contain;
+        t = reformat();
+    }
+
+    private void shortArray() {
+        contain = (size + 1) * 2;
+        t = reformat();
+    }
+
+    private void implementEmpty() {
+        front = 0;
+        end = 0;
     }
 
     public void addFirst(T item) {
-        if (fp < 0) {
-            fp = 0;
-            ep = 0;
+        if (size == 0) {
+            implementEmpty();
         }
-        fp = decPointer(fp);
-        items[fp] = item;
-        num += 1;
-        if (fp == ep) {
-            resize(size * 2);
+        front = helperfront(front);
+        t[front] = item;
+        size++;
+        if (size == contain) {
+            extendArray();
         }
+
     }
 
     public void addLast(T item) {
-        if (fp < 0) {
-            fp = 0;
-            ep = 0;
+        if (size == 0) {
+            implementEmpty();
         }
-        items[ep] = item;
-        ep = incPointer(ep);
-        num += 1;
-        if (fp == ep) {
-            resize(size * 2);
+        t[end] = item;
+        size++;
+        end = helperend(end);
+        if (size == contain) {
+            extendArray();
         }
-    }
-
-    public T removeFirst() {
-        if (num == 0) {
-            return null;
-        }
-        T ret = get(0);
-        items[fp] = null;
-        num -= 1;
-        if (num == 0) {
-            fp = -1;
-            ep = -1;
-        } else {
-            fp = incPointer(fp);
-        }
-        DecimalFormat df = new DecimalFormat("0.0000");
-        if (size >= 16 && Float.parseFloat(df.format((float) num / size)) < usageFactor) {
-            resize(appropriateSize(num));
-        }
-        return ret;
-    }
-
-    public T removeLast() {
-        if (num == 0) {
-            return null;
-        }
-        T ret = get(num - 1);
-        num -= 1;
-        ep = decPointer(ep);
-        items[ep] = null;
-        if (num == 0) {
-            fp = -1;
-            ep = -1;
-        }
-        DecimalFormat df = new DecimalFormat("0.0000");
-        if (size >= 16 && Float.parseFloat(df.format((float) num / size)) < usageFactor) {
-            resize(appropriateSize(num));
-        }
-        return ret;
-    }
-
-    public int size() {
-        return num;
     }
 
     public boolean isEmpty() {
-        return (num == 0);
+        return size == 0;
     }
 
-    public T get(int index) {
-        if (index >= num || index < 0) {
-            return null;
-        }
-        if (fp <= size - 1 - index) {
-            return items[fp + index];
-        } else {
-            return items[fp + index - size];
-        }
+    public int size() {
+        return size;
     }
 
     public void printDeque() {
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < size; i++) {
             System.out.print(get(i));
-            if (i != num - 1) {
+            if (i != size - 1) {
                 System.out.print(" ");
             }
         }
         System.out.println();
     }
 
-    private void resize(int newSize) {
-        T[] a = (T[]) new Object[newSize];
-        if (num + fp <= size) {
-            System.arraycopy(items, fp, a, 0, num);
-        } else {
-            System.arraycopy(items, fp, a, 0, size - fp);
-            System.arraycopy(items, 0, a, size - fp, num - size + fp);
+    public T removeFirst() {
+        if (size == 0) {
+            return null;
         }
-        fp = 0;
-        ep = num;
-        size = newSize;
-        items = a;
+        T temp = get(0);
+        t[front] = null;
+        size--;
+        if (size == 0) {
+            front = -1;
+            end = -1;
+        } else {
+            front = (front + contain + 1) % contain;
+        }
+        double actualUsage = (double) size / (double) contain;
+        if (size >= 16 && actualUsage < usage) {
+            shortArray();
+        }
+        return temp;
     }
 
-    private int appropriateSize(int number) {
-        return (number + 1) * 2;
+    public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
+        T temp = get(size - 1);
+        t[end] = null;
+        end = (end + contain - 1) % contain;
+        size--;
+        if (size == 0) {
+            front = -1;
+            end = -1;
+        }
+        double actualUsage = (double) size / (double) contain;
+        if (size >= 16 && actualUsage < usage) {
+            shortArray();
+        }
+        return temp;
+    }
+
+    public T get(int index) {
+        if (index >= size || index < 0) {
+            return null;
+        } else if (front + index < contain) {
+            return t[front + index];
+        } else {
+            return t[index - contain + front];
+        }
     }
 }
