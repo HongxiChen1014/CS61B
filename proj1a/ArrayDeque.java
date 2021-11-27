@@ -7,14 +7,18 @@ public class ArrayDeque<T> {
 
 
     private T[] t;
-    private int size = 0;
-    private int front = -1; //front pointer
-    private int end = -1; // end pointer
-    private int contain = 8;
+    private int size;
+    private int front; //front pointer
+    private int end; // end pointer
+    private int contain;
     private double usage = 0.25; //usage Factor
 
     public ArrayDeque() {
-        t = (T[]) new Object[contain];
+        t = (T[]) new Object[8];
+        contain = 8;
+        front = -1;
+        end = -1;
+        size = 0;
     }
 
     private int helperfront(int x) {
@@ -44,7 +48,7 @@ public class ArrayDeque<T> {
     }
 
     private void shortArray() {
-        contain = (size + 1) * 2;
+        contain = contain / 2;
         t = reformat();
     }
 
