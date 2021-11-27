@@ -38,33 +38,6 @@ public class ArrayDequeTest {
         arr1.addFirst(0);
         int a = arr1.removeLast();
         assertEquals(0, a);
-        arr1.addLast(2);
-        arr1.addLast(3);
-        arr1.addFirst(4);
-        arr1.addFirst(5);
-        arr1.addFirst(6);
-        arr1.addLast(7);
-        arr1.removeLast();
-        arr1.removeFirst();
-        arr1.printDeque();
     }
-
-    @Test
-    public void testArrayDequeAddLast() {
-        ArrayDeque<Integer> arr1 = new ArrayDeque<>();
-        assertEquals(true, arr1.isEmpty());
-        arr1.addLast(1);
-        arr1.addLast(2);
-        arr1.addLast(3);
-        arr1.addLast(4);
-        arr1.addLast(5);
-        arr1.addLast(6);
-        arr1.addLast(7);
-        arr1.addLast(8);
-        arr1.addLast(9);
-        System.out.println(arr1.size());
-        assertEquals(9, arr1.size());
-        arr1.printDeque();
-        assertEquals((Integer) 1, arr1.get(0));
-    }
+    
 }

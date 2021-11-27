@@ -54,29 +54,30 @@ public class ArrayDeque<T> {
     }
 
     public void addFirst(T item) {
-        if (size == contain) {
-            extendArray();
-            front = helperfront(front);
-        } else if (size == 0) {
+        if (size == 0) {
             implementEmpty();
         } else {
             front = helperfront(front);
         }
         t[front] = item;
         size++;
+        if (size == contain) {
+            extendArray();
+        }
+
     }
 
     public void addLast(T item) {
-        if (size == contain) {
-            extendArray();
-            end = helperend(end);
-        } else if (size == 0) {
+        if (size == 0) {
             implementEmpty();
         } else {
             end = helperend(end);
         }
         t[end] = item;
         size++;
+        if (size == contain) {
+            extendArray();
+        }
     }
 
     public boolean isEmpty() {
@@ -103,6 +104,9 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
         T temp = t[front];
         front = (front + contain + 1) % contain;
         size--;
@@ -111,7 +115,7 @@ public class ArrayDeque<T> {
             end = -1;
         }
         double actualUsage = (double) size / (double) contain;
-        if (size != 0 && actualUsage < usage) {
+        if (size >= 16 && actualUsage < usage) {
             shortArray();
         }
 
@@ -119,6 +123,9 @@ public class ArrayDeque<T> {
     }
 
     public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
         T temp = t[end];
         end = (end + contain - 1) % contain;
         size--;
@@ -127,14 +134,14 @@ public class ArrayDeque<T> {
             end = -1;
         }
         double actualUsage = (double) size / (double) contain;
-        if (size != 0 && actualUsage < usage) {
+        if (size >= 16 && actualUsage < usage) {
             shortArray();
         }
         return temp;
     }
 
     public T get(int index) {
-        if (index >= size) {
+        if (index >= size || index < 0) {
             return null;
         } else if (front + index < contain) {
             return t[front + index];
