@@ -7,18 +7,14 @@ public class ArrayDeque<T> {
 
 
     private T[] t;
-    private int size;
-    private int front; //front pointer
-    private int end; // end pointer
-    private int contain;
+    private int size = 0;
+    private int front = -1; //front pointer
+    private int end = -1; // end pointer
+    private int contain = 8;
     private double usage = 0.25; //usage Factor
 
     public ArrayDeque() {
         t = (T[]) new Object[8];
-        contain = 8;
-        front = -1;
-        end = -1;
-        size = 0;
     }
 
     private int helperfront(int x) {
@@ -36,9 +32,9 @@ public class ArrayDeque<T> {
         } else {
             System.arraycopy(t, front, temp, 0, size - front);
             System.arraycopy(t, 0, temp, size - front, end + 1);
-            front = 0;
-            end = size - 1;
         }
+        front = 0;
+        end = size - 1;
         return temp;
     }
 
@@ -117,7 +113,7 @@ public class ArrayDeque<T> {
             front = (front + contain + 1) % contain;
         }
         double actualUsage = (double) size / (double) contain;
-        if (size >= 16 && actualUsage < usage) {
+        if (contain >= 16 && actualUsage < usage) {
             shortArray();
         }
         return temp;
@@ -136,7 +132,7 @@ public class ArrayDeque<T> {
             end = -1;
         }
         double actualUsage = (double) size / (double) contain;
-        if (size >= 16 && actualUsage < usage) {
+        if (contain >= 16 && actualUsage < usage) {
             shortArray();
         }
         return temp;
@@ -151,4 +147,5 @@ public class ArrayDeque<T> {
             return t[index - contain + front];
         }
     }
+
 }
