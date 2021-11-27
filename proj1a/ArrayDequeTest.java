@@ -9,25 +9,44 @@ import static org.junit.Assert.assertEquals;
  */
 public class ArrayDequeTest {
     @Test
-    public void testAddFirst() {
+    public void testIsEmpty1() {
         ArrayDeque<Integer> arr1 = new ArrayDeque<>();
         assertEquals(true, arr1.isEmpty());
         arr1.addFirst(1);
         assertEquals(1, arr1.size());
         assertEquals(false, arr1.isEmpty());
-        arr1.removeFirst();
+        int m = arr1.removeFirst();
+        assertEquals(1, m);
         assertEquals(true, arr1.isEmpty());
     }
 
     @Test
-    public void testAddLast() {
+    public void testIsEmpty2() {
         ArrayDeque<Integer> arr1 = new ArrayDeque<>();
         assertEquals(true, arr1.isEmpty());
         arr1.addLast(1);
         assertEquals(1, arr1.size());
         assertEquals(false, arr1.isEmpty());
-        arr1.removeLast();
+        int m = arr1.removeLast();
+        assertEquals(1, m);
         assertEquals(true, arr1.isEmpty());
+    }
+
+    @Test
+    public void testAddFirst() {
+        ArrayDeque<Integer> arr1 = new ArrayDeque<>();
+        arr1.addFirst(0);
+        int a = arr1.removeLast();
+        assertEquals(0, a);
+        arr1.addLast(2);
+        arr1.addLast(3);
+        arr1.addFirst(4);
+        arr1.addFirst(5);
+        arr1.addFirst(6);
+        arr1.addLast(7);
+        arr1.removeLast();
+        arr1.removeFirst();
+        arr1.printDeque();
     }
 
     @Test

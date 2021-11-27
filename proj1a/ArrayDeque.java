@@ -110,7 +110,7 @@ public class ArrayDeque<T> {
             front = -1;
             end = -1;
         }
-        double actualUsage = size / contain;
+        double actualUsage = (double) size / (double) contain;
         if (size != 0 && actualUsage < usage) {
             shortArray();
         }
@@ -126,7 +126,7 @@ public class ArrayDeque<T> {
             front = -1;
             end = -1;
         }
-        double actualUsage = size / contain;
+        double actualUsage = (double) size / (double) contain;
         if (size != 0 && actualUsage < usage) {
             shortArray();
         }
