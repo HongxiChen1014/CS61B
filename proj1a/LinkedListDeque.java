@@ -9,7 +9,7 @@ public class LinkedListDeque<T> {
         private LinkedList<T> prev;
         private LinkedList<T> next;
 
-        public LinkedList(T i) {
+        private LinkedList(T i) {
             first = i;
             prev = null;
             next = null;
@@ -18,39 +18,47 @@ public class LinkedListDeque<T> {
 
     private LinkedList<T> t;
     private int size;
-    private LinkedList<T> numFirst;
-    private LinkedList<T> numLast;
+    private LinkedList<T> front;
+    private LinkedList<T> end;
 
     public LinkedListDeque() {
         size = 0;
-        t = null;
+        t = new LinkedList(null);
     }
 
-    private void notNull(T item) {
-        t = new LinkedList<T>(item);
-        numFirst = t;
-        numLast = t;
-    }
 
     public void addFirst(T item) {
-        if (t == null) {
-            notNull(item);
+        if (size == 0) {
+            t.next = new LinkedList(item);
+            t.next.prev = t;
+            t.prev = t.next;
+            t.prev.next = t;
+            end = t.next;
         } else {
-            numFirst.prev = new LinkedList<T>(item);
-            numFirst.prev.next = numFirst;
-            numFirst = numFirst.prev;
+            LinkedList temp = t.next;
+            t.next = new LinkedList(item);
+            t.next.prev = t;
+            t.next.next = temp;
+            t.next.next.prev = t.next;
         }
+        front = t.next;
         size++;
     }
 
     public void addLast(T item) {
-        if (t == null) {
-            notNull(item);
+        if (size == 0) {
+            t.prev = new LinkedList(item);
+            t.prev.next = t;
+            t.next = t.prev;
+            t.next.prev = t;
+            front = t.next;
         } else {
-            numLast.next = new LinkedList<>(item);
-            numLast.next.prev = numLast;
-            numLast = numLast.next;
+            t.prev = new LinkedList(item);
+            t.prev.next = t;
+            end.next = t.prev;
+            end.next.prev = end;
         }
+        end = t.prev;
         size++;
     }
 
@@ -63,70 +71,72 @@ public class LinkedListDeque<T> {
     }
 
     public void printDeque() {
-        LinkedList<T> cur = numFirst;
-
-        while (cur != null) {
-            System.out.print(cur.first + " ");
-            cur = cur.next;
+        LinkedList<T> cur = front;
+        for (int i = 0; i < size; i++) {
+            System.out.print(get(i));
+            if (i != size - 1) {
+                System.out.print(" ");
+            }
         }
-    }
-
-    private void isNull() {
-        t = null;
-        numLast = null;
-        numFirst = null;
+        System.out.println();
     }
 
     public T removeFirst() {
-        LinkedList<T> cur = numFirst;
-        T temp = cur.first;
+        if (size == 0) {
+            return null;
+        }
+        T value = front.first;
+        front = front.next;
+        t.next = front;
+        front.prev = t;
         size--;
         if (size == 0) {
-            isNull();
-        } else {
-            cur.next.prev = null;
-            cur.next = null;
+            front = null;
+            end = null;
         }
-        return temp;
+        return value;
+
     }
 
     public T removeLast() {
-        LinkedList<T> cur = numLast;
-        T temp = cur.first;
+        if (size == 0) {
+            return null;
+        }
+        T value = end.first;
+        end = end.prev;
+        end.next = t;
+        end.prev = end.next.prev;
+        t.prev = end;
         size--;
         if (size == 0) {
-            isNull();
-        } else {
-            cur.prev.next = null;
-            cur.prev = null;
+            front = null;
+            end = null;
         }
-        return temp;
+        return value;
     }
 
     public T get(int index) {
-        LinkedList<T> cur = numFirst;
-        int i = index;
-        while (i > 0 && cur != null) {
-            cur = cur.next;
-            i--;
-        }
-        if (cur == null) {
+        if (index < 0 || front == null || index >= size) {
             return null;
+        }
+        LinkedList<T> cur = front;
+        for (int i = 0; i < index; i++) {
+            cur = cur.next;
         }
         return cur.first;
     }
 
 
     public T getRecursive(int index) {
-        LinkedList<T> result = getRecursiveHelper(numFirst, index);
-        if (result == null) {
+        if (index < 0 || front == null || index >= size) {
             return null;
         }
+        LinkedList<T> result = getRecursiveHelper(front, index);
         return result.first;
     }
 
     private LinkedList<T> getRecursiveHelper(LinkedList<T> cur, int index) {
-        if (index == 0 || cur == null) {
+        if (index == 0) {
             return cur;
         } else {
             return getRecursiveHelper(cur.next, index - 1);
