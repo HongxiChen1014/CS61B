@@ -105,7 +105,6 @@ public class LinkedListDeque<T> {
         T value = end.first;
         end = end.prev;
         end.next = t;
-        end.prev = end.next.prev;
         t.prev = end;
         size--;
         if (size == 0) {

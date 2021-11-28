@@ -42,10 +42,10 @@ public class LinkedListDequeTest {
         lld.addLast(1);
         lld.addLast(2);
         lld.addLast(3);
-        lld.removeFirst();
+        lld.removeLast();
         assertEquals(2, lld.size());
-        lld.removeFirst();
-        lld.removeFirst();
+        lld.removeLast();
+        lld.removeLast();
         assertEquals(true, lld.isEmpty());
     }
 
