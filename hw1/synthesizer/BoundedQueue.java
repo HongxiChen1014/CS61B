@@ -19,11 +19,11 @@ public interface BoundedQueue<T> extends Iterable<T> {
     public T peek();
 
     default boolean isEmpty() {
-        return true;
+        return capacity() == 0;
     }
 
     default boolean isFull() {
-        return false;
+        return fillCount() == capacity();
     }
 
     public Iterator<T> iterator();
