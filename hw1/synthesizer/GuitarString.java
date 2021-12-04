@@ -17,24 +17,28 @@ public class GuitarString {
     public GuitarString(double frequency) {
         int num = (int) Math.round(SR / frequency);
         buffer = new ArrayRingBuffer(num);
+        for (int i = 0; i < num; i++) {
+            buffer.enqueue(0.0);
+        }
     }
 
 
     /* Pluck the guitar string by replacing the buffer with white noise. */
     public void pluck() {
         //       Make sure that your random numbers are different from each other.
-        while (!buffer.isFull()) {
-            double r = Math.random() - 0.5;
-            buffer.enqueue(r);
+        for (int i = 0; i < buffer.fillCount(); i++) {
+            buffer.dequeue();
+            buffer.enqueue(Math.random() - 0.5);
         }
+
     }
+
 
     /* Advance the simulation one time step by performing one iteration of
      * the Karplus-Strong algorithm.
      */
     public void tic() {
-        double out = buffer.dequeue();
-        double in = (sample() + out) * 0.5 * DECAY;
+        double in = (buffer.dequeue() + buffer.peek()) * 0.5 * DECAY;
         buffer.enqueue(in);
     }
 

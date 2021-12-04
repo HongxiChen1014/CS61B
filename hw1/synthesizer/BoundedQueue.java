@@ -8,15 +8,15 @@ import java.util.Iterator;
  * @create 2021-12-04-12:49
  */
 public interface BoundedQueue<T> extends Iterable<T> {
-    public int capacity();
+    int capacity();
 
-    public int fillCount();
+    int fillCount();
 
-    public void enqueue(T x);
+    void enqueue(T x);
 
-    public T dequeue();
+    T dequeue();
 
-    public T peek();
+    T peek();
 
     default boolean isEmpty() {
         return fillCount() == 0;
@@ -26,5 +26,5 @@ public interface BoundedQueue<T> extends Iterable<T> {
         return fillCount() == capacity();
     }
 
-    public Iterator<T> iterator();
+    Iterator<T> iterator();
 }
