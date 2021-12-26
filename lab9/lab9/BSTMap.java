@@ -132,25 +132,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
         int compare = n.key.compareTo(key);
         if (compare == 0) {
-            //delete nodes with no child
-            if (n.left == null && n.right == null) {
-                V removeValue = n.value;
-                n = null;
-                return removeValue;
-            }
-            //delete nodes with one child
-            if (n.left == null) {
-                V removeValue = n.value;
-                n = n.right;
-                return removeValue;
-            }
-            if (n.right == null) {
-                V removeValue = n.value;
-                n = n.left;
-                return removeValue;
-            }
-            //delete nodes with two child
-
+            size -= 1;
+            V returnValue = n.value;
+            findNewRoot(n);
+            return returnValue;
         }
         if (compare > 0) {
             return remove(key, n.left);
@@ -158,6 +143,40 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             return remove(key, n.right);
         }
 
+    }
+
+    //deleting and find new root
+    private void findNewRoot(Node n) {
+        if (n.left == null || n.right == null) {
+            //delete nodes with no child
+            if (n.left == null && n.right == null) {
+                n = null;
+            }
+            //delete nodes with one child
+            else if (n.left == null) {
+                n = n.right;
+            } else if (n.right == null) {
+                n = n.left;
+            }
+        } else {
+            //delete nodes with two child
+            if (n.left.right != null) {
+                Node newRoot = n.left.right;
+                n.key = newRoot.key;
+                n.value = newRoot.value;
+                findNewRoot(newRoot);
+
+            } else if (n.right.left != null) {
+                Node newRoot = n.right.left;
+                n.key = newRoot.key;
+                n.value = newRoot.value;
+                findNewRoot(newRoot);
+            } else {
+                n.key = n.left.key;
+                n.value = n.left.value;
+                n.left = null;
+            }
+        }
     }
 
     @Override

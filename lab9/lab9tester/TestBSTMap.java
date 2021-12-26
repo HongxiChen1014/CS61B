@@ -3,8 +3,6 @@ package lab9tester;
 import lab9.BSTMap;
 import org.junit.Test;
 
-import java.util.Set;
-
 import static org.junit.Assert.*;
 
 /**
@@ -95,7 +93,11 @@ public class TestBSTMap {
         bstmap.put("cat", 10);
         bstmap.put("fish", 22);
         bstmap.put("zebra", 90);
-        Set<String> result = bstmap.keySet();
+        bstmap.remove("cat");
+        bstmap.remove("fish", 22);
+        bstmap.remove("hello");
+        bstmap.remove("zebra", 90);
+        assertEquals(0, bstmap.size());
     }
 
     public static void main(String[] args) {
