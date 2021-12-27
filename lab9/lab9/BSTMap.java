@@ -186,11 +186,19 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     @Override
     public V remove(K key) {
-        V removeValue = get(key);
-        if (removeValue != null) {
-            root = remove(key, root);
+        /**
+         V removeValue = get(key);
+         if (removeValue != null) {
+         root = remove(key, root);
+         }
+         return removeValue;
+         */
+        V ret = get(key);
+        if (ret == null) {
+            return null;
         }
-        return removeValue;
+        root = remove(key, root);
+        return ret;
     }
 
     /**
@@ -200,13 +208,22 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        V removeValue = get(key);
-        if (removeValue != null && removeValue.equals(value)) {
-            root = remove(key, root);
-            return removeValue;
+        /**
+         V removeValue = get(key);
+         if (removeValue != null && removeValue.equals(value)) {
+         root = remove(key, root);
+         return removeValue;
+         }
+         return null;
+         */
+        V ret = get(key);
+        if (ret == null || value == null || !value.equals(ret)) {
+            return null;
         }
-        return null;
+        root = remove(key, root);
+        return ret;
     }
+
 
     @Override
     public Iterator<K> iterator() {

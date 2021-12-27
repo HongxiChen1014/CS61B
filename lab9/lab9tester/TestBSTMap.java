@@ -93,7 +93,8 @@ public class TestBSTMap {
         bstmap.put("cat", 10);
         bstmap.put("fish", 22);
         bstmap.put("zebra", 90);
-        bstmap.remove("cat");
+        System.out.println(bstmap.remove("cat"));
+        System.out.println(bstmap.remove("fish", 23));
         bstmap.remove("fish", 22);
         bstmap.remove("hello");
         bstmap.remove("zebra", 90);
