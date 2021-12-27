@@ -130,38 +130,25 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         if (n == null) {
             return null;
         }
-        int compare = n.key.compareTo(key);
-        if (compare == 0) {
+        int cmp = n.key.compareTo(key);
+        if (cmp == 0) {
             size -= 1;
-            n = findNewRoot(n);
-        } else if (compare > 0) {
-            n.left = remove(key, n.left);
-        } else {
-            n.right = remove(key, n.right);
-        }
-        return n;
-    }
-
-    //deleting and find new root
-    private Node findNewRoot(Node n) {
-        if (n.left == null || n.right == null) {
-            //delete nodes with no child
-            //delete nodes with one child
             if (n.left == null) {
                 return n.right;
             }
             if (n.right == null) {
                 return n.left;
             }
-        } else {
-            //delete nodes with two child,find max node at left
             Node t = n;
             n = findMax(n.left);
-            n.left = deleteMax(n.left);
+            n.left = deleteMax(t.left);
             n.right = t.right;
-            return n;
+        } else if (cmp > 0) {
+            n.left = remove(key, n.left);
+        } else {
+            n.right = remove(key, n.right);
         }
-        return null;
+        return n;
     }
 
     private Node findMax(Node n) {
@@ -180,25 +167,16 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         } else {
             return n.left;
         }
-
         return n;
     }
 
     @Override
     public V remove(K key) {
-        /**
-         V removeValue = get(key);
-         if (removeValue != null) {
-         root = remove(key, root);
-         }
-         return removeValue;
-         */
-        V ret = get(key);
-        if (ret == null) {
-            return null;
+        V removeValue = get(key);
+        if (removeValue != null) {
+            root = remove(key, root);
         }
-        root = remove(key, root);
-        return ret;
+        return removeValue;
     }
 
     /**
@@ -208,22 +186,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        /**
-         V removeValue = get(key);
-         if (removeValue != null && removeValue.equals(value)) {
-         root = remove(key, root);
-         return removeValue;
-         }
-         return null;
-         */
-        V ret = get(key);
-        if (ret == null || value == null || !value.equals(ret)) {
-            return null;
+        V removeValue = get(key);
+        if (removeValue != null && removeValue.equals(value)) {
+            root = remove(key, root);
+            return removeValue;
         }
-        root = remove(key, root);
-        return ret;
-    }
+        return null;
 
+    }
 
     @Override
     public Iterator<K> iterator() {
