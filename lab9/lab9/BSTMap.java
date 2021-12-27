@@ -126,66 +126,71 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * returns VALUE removed,
      * null on failed removal.
      */
-    private V remove(K key, Node n) {
-        if (n == null || key == null) {
+    private Node remove(K key, Node n) {
+        if (n == null) {
             return null;
         }
         int compare = n.key.compareTo(key);
         if (compare == 0) {
             size -= 1;
-            V returnValue = n.value;
-            findNewRoot(n);
-            return returnValue;
-        }
-        if (compare > 0) {
-            return remove(key, n.left);
+            n = findNewRoot(n);
+        } else if (compare > 0) {
+            n.left = remove(key, n.left);
         } else {
-            return remove(key, n.right);
+            n.right = remove(key, n.right);
         }
-
+        return n;
     }
 
     //deleting and find new root
-    private void findNewRoot(Node n) {
+    private Node findNewRoot(Node n) {
         if (n.left == null || n.right == null) {
             //delete nodes with no child
-            if (n.left == null && n.right == null) {
-                n = null;
-            }
             //delete nodes with one child
-            else if (n.left == null) {
-                n = n.right;
-            } else if (n.right == null) {
-                n = n.left;
+            if (n.left == null) {
+                return n.right;
+            }
+            if (n.right == null) {
+                return n.left;
             }
         } else {
-            //delete nodes with two child
-            if (n.left.right != null) {
-                Node newRoot = n.left.right;
-                n.key = newRoot.key;
-                n.value = newRoot.value;
-                findNewRoot(newRoot);
-
-            } else if (n.right.left != null) {
-                Node newRoot = n.right.left;
-                n.key = newRoot.key;
-                n.value = newRoot.value;
-                findNewRoot(newRoot);
-            } else {
-                n.key = n.left.key;
-                n.value = n.left.value;
-                n.left = null;
-            }
+            //delete nodes with two child,find max node at left
+            Node t = n;
+            n = findMax(n.left);
+            n.left = deleteMax(n.left);
+            n.right = t.right;
+            return n;
         }
+        return null;
+    }
+
+    private Node findMax(Node n) {
+        if (n == null || n.right == null) {
+            return n;
+        }
+        return findMax(n.right);
+    }
+
+    private Node deleteMax(Node n) {
+        if (n == null) {
+            return n;
+        }
+        if (n.right != null) {
+            n.right = deleteMax(n.right);
+        } else {
+            return n.left;
+        }
+
+        return n;
     }
 
     @Override
     public V remove(K key) {
-        V containsKey = get(key);
-        if (containsKey != null) {
-            return remove(key, root);
+        V removeValue = get(key);
+        if (removeValue != null) {
+            root = remove(key, root);
         }
-        return null;
+        return removeValue;
     }
 
     /**
@@ -195,11 +200,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        V containsKey = get(key);
-        if (containsKey == value) {
-            return remove(key, root);
+        V removeValue = get(key);
+        if (removeValue == value) {
+            root = remove(key, root);
         }
-        return null;
+        return removeValue;
     }
 
     @Override
