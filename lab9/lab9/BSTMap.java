@@ -46,7 +46,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * or null if this map contains no mapping for the key.
      */
     private V getHelper(K key, Node p) {
-        if (p == null) {
+        if (p == null || key == null) {
             return null;
         }
         int compare = p.key.compareTo(key);
@@ -201,10 +201,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     @Override
     public V remove(K key, V value) {
         V removeValue = get(key);
-        if (removeValue.equals(value)) {
+        if (removeValue != null && removeValue.equals(value)) {
             root = remove(key, root);
+            return removeValue;
         }
-        return removeValue;
+        return null;
     }
 
     @Override
