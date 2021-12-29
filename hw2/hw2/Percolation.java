@@ -4,7 +4,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     private int n;
-    boolean[][] grids;
+    private boolean[][] grids;
     private WeightedQuickUnionUF percolateSet;
     private int openGrids;
 
@@ -15,6 +15,7 @@ public class Percolation {
         }
         n = N;
         openGrids = 0;
+        grids = new boolean[N][N];
         percolateSet = new WeightedQuickUnionUF(N * N + 2);
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -29,7 +30,7 @@ public class Percolation {
         if (row >= n || col >= n || row < 0 || col < 0) {
             throw new IndexOutOfBoundsException();
         }
-        if (grids[row][col] == false) {
+        if (!grids[row][col]) {
             openGrids += 1;
             grids[row][col] = true;
             if (row == 0) {
@@ -73,22 +74,27 @@ public class Percolation {
     }
 
 
+    // use for unit testing (not required)
+    public static void main(String[] agrs) {
+    }
+
+    
     private int xyToIndex(int row, int col) {
         return row * n + col;
     }
 
     private void unionAround(int row, int col) {
         if (row - 1 >= 0 && isOpen(row - 1, col)) {
-            unionAround(xyToIndex(row - 1, col), xyToIndex(row, col));
+            percolateSet.union(xyToIndex(row - 1, col), xyToIndex(row, col));
         }
         if (row + 1 < n && isOpen(row + 1, col)) {
-            unionAround(xyToIndex(row + 1, col), xyToIndex(row, col));
+            percolateSet.union(xyToIndex(row + 1, col), xyToIndex(row, col));
         }
         if (col - 1 >= 0 && isOpen(row, col - 1)) {
-            unionAround(xyToIndex(row, col - 1), xyToIndex(row, col));
+            percolateSet.union(xyToIndex(row, col - 1), xyToIndex(row, col));
         }
         if (col + 1 < n && isOpen(row, col + 1)) {
-            unionAround(xyToIndex(row, col + 1), xyToIndex(row, col));
+            percolateSet.union(xyToIndex(row, col + 1), xyToIndex(row, col));
         }
     }
 
