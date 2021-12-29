@@ -13,6 +13,9 @@ public class PercolationStats {
         if (N <= 0 || T <= 0) {
             throw new IllegalArgumentException();
         }
+        x = new double[T];
+        n = N;
+        t = T;
         for (int i = 0; i < T; i++) {
             Percolation perc = pf.make(N);
             while (true) {
@@ -53,6 +56,4 @@ public class PercolationStats {
         double ret = mean() + 1.96 * stddev() / Math.sqrt(t);
         return ret;
     }
-
-
 }
