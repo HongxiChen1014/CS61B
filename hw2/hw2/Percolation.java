@@ -6,6 +6,7 @@ public class Percolation {
     private int n;
     private boolean[][] grids;
     private WeightedQuickUnionUF percolateSet;
+    private WeightedQuickUnionUF isFullSet;
     private int openGrids;
 
     // create N-by-N grid, with all sites initially blocked
@@ -17,6 +18,7 @@ public class Percolation {
         openGrids = 0;
         grids = new boolean[N][N];
         percolateSet = new WeightedQuickUnionUF(N * N + 2);
+        isFullSet = new WeightedQuickUnionUF(N * N + 1);
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 grids[i][j] = false;
@@ -35,6 +37,7 @@ public class Percolation {
             grids[row][col] = true;
             if (row == 0) {
                 percolateSet.union(xyToIndex(row, col), n * n);
+                isFullSet.union(xyToIndex(row, col), n * n);
             }
             if (row == n - 1) {
                 percolateSet.union(xyToIndex(row, col), n * n + 1);
@@ -58,7 +61,7 @@ public class Percolation {
         if (row >= n || col >= n || row < 0 || col < 0) {
             throw new IndexOutOfBoundsException();
         }
-        return percolateSet.connected(n * n, n * n + 1);
+        return isFullSet.connected(xyToIndex(row, col), n * n);
 
     }
 
@@ -78,7 +81,7 @@ public class Percolation {
     public static void main(String[] agrs) {
     }
 
-    
+
     private int xyToIndex(int row, int col) {
         return row * n + col;
     }
@@ -86,15 +89,19 @@ public class Percolation {
     private void unionAround(int row, int col) {
         if (row - 1 >= 0 && isOpen(row - 1, col)) {
             percolateSet.union(xyToIndex(row - 1, col), xyToIndex(row, col));
+            isFullSet.union(xyToIndex(row - 1, col), xyToIndex(row, col));
         }
         if (row + 1 < n && isOpen(row + 1, col)) {
             percolateSet.union(xyToIndex(row + 1, col), xyToIndex(row, col));
+            isFullSet.union(xyToIndex(row + 1, col), xyToIndex(row, col));
         }
         if (col - 1 >= 0 && isOpen(row, col - 1)) {
             percolateSet.union(xyToIndex(row, col - 1), xyToIndex(row, col));
+            isFullSet.union(xyToIndex(row, col - 1), xyToIndex(row, col));
         }
         if (col + 1 < n && isOpen(row, col + 1)) {
             percolateSet.union(xyToIndex(row, col + 1), xyToIndex(row, col));
+            isFullSet.union(xyToIndex(row, col + 1), xyToIndex(row, col));
         }
     }
 
