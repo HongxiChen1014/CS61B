@@ -118,9 +118,6 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      * Bubbles down the node currently at the given index.
      */
     private void sink(int index) {
-        if (leftIndex(index) > size) {
-            return;
-        }
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
@@ -132,7 +129,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             if (i + 1 <= size && contents[i].priority() > contents[i + 1].priority()) {
                 i += 1;
             }
-            if (contents[index].priority() < contents[i].priority()) {
+            if (contents[index].priority() <= contents[i].priority()) {
                 break;
             }
             swap(index, i);
@@ -179,7 +176,9 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         swap(1, size);
         size -= 1;
         contents[size + 1] = null;
-        sink(1);
+        if (size != 0) {
+            sink(1);
+        }
         return ret;
     }
 
@@ -202,22 +201,13 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public void changePriority(T item, double priority) {
-        int index = size + 1;
         for (int i = 1; i < size; i++) {
             if (contents[i].item().equals(item)) {
-                index = i;
+                contents[i].myPriority = priority;
+                swim(i);
+                sink(i);
                 break;
             }
-        }
-        if (index > size) {
-            return;
-        }
-        if (contents[index].myPriority > priority) {
-            contents[index].myPriority = priority;
-            swim(index);
-        } else if (contents[index].myPriority < priority) {
-            contents[index].myPriority = priority;
-            sink(index);
         }
     }
 
