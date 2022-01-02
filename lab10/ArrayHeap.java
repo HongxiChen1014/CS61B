@@ -116,24 +116,36 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
     /**
      * Bubbles down the node currently at the given index.
+     * <p>
+     * private void sink(int index) {
+     * // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
+     * validateSinkSwimArg(index);
+     * <p>
+     * if (!inBounds(index)) {
+     * throw new IllegalArgumentException();
+     * }
+     * while (2 * index <= size) {
+     * int i = 2 * index;
+     * if (i + 1 <= size && contents[i].priority() > contents[i + 1].priority()) {
+     * i += 1;
+     * }
+     * if (contents[index].priority() <= contents[i].priority()) {
+     * break;
+     * }
+     * swap(index, i);
+     * index = i;
+     * }
+     * }
      */
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
-        if (!inBounds(index)) {
-            throw new IllegalArgumentException();
-        }
-        while (2 * index <= size) {
-            int i = 2 * index;
-            if (i + 1 <= size && contents[i].priority() > contents[i + 1].priority()) {
-                i += 1;
-            }
-            if (contents[index].priority() <= contents[i].priority()) {
-                break;
-            }
-            swap(index, i);
-            index = i;
+        int minChildIndex = min(leftIndex(index), rightIndex(index));
+        while (inBounds(minChildIndex) && getNode(index).myPriority > getNode(minChildIndex).myPriority) {
+            swap(index, minChildIndex);
+            index = minChildIndex;
+            minChildIndex = min(leftIndex(index), rightIndex(index));
         }
     }
 
