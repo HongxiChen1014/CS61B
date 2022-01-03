@@ -116,38 +116,27 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
     /**
      * Bubbles down the node currently at the given index.
-     * <p>
-     * private void sink(int index) {
-     * // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
-     * validateSinkSwimArg(index);
-     * <p>
-     * if (!inBounds(index)) {
-     * throw new IllegalArgumentException();
-     * }
-     * while (2 * index <= size) {
-     * int i = 2 * index;
-     * if (i + 1 <= size && contents[i].priority() > contents[i + 1].priority()) {
-     * i += 1;
-     * }
-     * if (contents[index].priority() <= contents[i].priority()) {
-     * break;
-     * }
-     * swap(index, i);
-     * index = i;
-     * }
-     * }
      */
+
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-
-        int minChildIndex = min(leftIndex(index), rightIndex(index));
-        while (inBounds(minChildIndex) && getNode(index).myPriority > getNode(minChildIndex).myPriority) {
-            swap(index, minChildIndex);
-            index = minChildIndex;
-            minChildIndex = min(leftIndex(index), rightIndex(index));
+        if (!inBounds(index)) {
+            throw new IllegalArgumentException();
+        }
+        while (2 * index <= size) {
+            int i = 2 * index;
+            if (i + 1 <= size && contents[i].priority() > contents[i + 1].priority()) {
+                i += 1;
+            }
+            if (contents[index].priority() <= contents[i].priority()) {
+                break;
+            }
+            swap(index, i);
+            index = i;
         }
     }
+
 
     /**
      * Inserts an item with the given priority value. This is enqueue, or offer.
@@ -213,12 +202,15 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public void changePriority(T item, double priority) {
-        for (int i = 1; i < size; i++) {
+        for (int i = 1; i <= size; i++) {
             if (contents[i].item().equals(item)) {
-                contents[i].myPriority = priority;
-                swim(i);
-                sink(i);
-                break;
+                if (contents[i].myPriority > priority) {
+                    contents[i].myPriority = priority;
+                    swim(i);
+                } else if (contents[i].myPriority < priority) {
+                    contents[i].myPriority = priority;
+                    sink(i);
+                }
             }
         }
     }
@@ -454,5 +446,6 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             i += 1;
         }
     }
+
 
 }
