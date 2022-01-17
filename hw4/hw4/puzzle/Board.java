@@ -83,7 +83,7 @@ public class Board implements WorldState {
         int estimate = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (tileAt(i, j) != goal[i][j]) {
+                if (tileAt(i, j) != 0 && tileAt(i, j) != goal[i][j]) {
                     estimate += 1;
                 }
             }
@@ -99,7 +99,6 @@ public class Board implements WorldState {
                     int goalX = (tileAt(i, j) - 1) / N;
                     int goalY = (tileAt(i, j) - 1) % N;
                     estimate += abs(goalX - i) + abs(goalY - j);
-                    System.out.println(i + " " + j + " " + tileAt(i, j) + " " + goalX + " " + goalY + " " + estimate);
                 }
             }
         }
