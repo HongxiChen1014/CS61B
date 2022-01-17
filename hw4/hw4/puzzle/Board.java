@@ -9,6 +9,7 @@ public class Board implements WorldState {
     private int N;
     private int[][] tiles;
     private int[][] goal;
+    private static final int BLANK = 0;
 
     /**
      * Constructs a board from an N-by-N array of tiles where
@@ -34,7 +35,7 @@ public class Board implements WorldState {
     //Returns value of tile at row i, column j (or 0 if blank)
     public int tileAt(int i, int j) {
         if (i < 0 || j < 0 || i >= N || j >= N) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("out of bounds");
         }
         return tiles[i][j];
     }
@@ -51,7 +52,7 @@ public class Board implements WorldState {
         int blankY = -1;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (tileAt(i, j) == 0) {
+                if (tileAt(i, j) == BLANK) {
                     blankX = i;
                     blankY = j;
                     break;
@@ -69,10 +70,10 @@ public class Board implements WorldState {
             for (int j = 0; j < N; j++) {
                 if (abs(i - blankX) + abs(j - blankY) == 1) {
                     newBoard[blankX][blankY] = tileAt(i, j);
-                    newBoard[i][j] = 0;
+                    newBoard[i][j] = BLANK;
                     neighbs.add(new Board(newBoard));
                     newBoard[i][j] = newBoard[blankX][blankY];
-                    newBoard[blankX][blankY] = 0;
+                    newBoard[blankX][blankY] = BLANK;
                 }
             }
         }
@@ -83,7 +84,7 @@ public class Board implements WorldState {
         int estimate = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (tileAt(i, j) != 0 && tileAt(i, j) != goal[i][j]) {
+                if (tileAt(i, j) != BLANK && tileAt(i, j) != goal[i][j]) {
                     estimate += 1;
                 }
             }
@@ -95,7 +96,7 @@ public class Board implements WorldState {
         int estimate = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (tileAt(i, j) != 0 && tileAt(i, j) != goal[i][j]) {
+                if (tileAt(i, j) != BLANK && tileAt(i, j) != goal[i][j]) {
                     int goalX = (tileAt(i, j) - 1) / N;
                     int goalY = (tileAt(i, j) - 1) % N;
                     estimate += abs(goalX - i) + abs(goalY - j);
