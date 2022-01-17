@@ -39,4 +39,25 @@ public class TestBoard {
         assertEquals(2, b.manhattan());
     }
 
+    @Test
+    public void TestHamming2() {
+        int[][] x = new int[2][2];
+        x[0][0] = 3;
+        x[0][1] = 0;
+        x[1][0] = 2;
+        x[1][1] = 1;
+        Board b = new Board(x);
+        assertEquals(3, b.manhattan());
+    }
+
+    @Test
+    public void TestHamming3() {
+        int[][] x = new int[2][2];
+        x[0][0] = 3;
+        x[0][1] = 1;
+        x[1][0] = 2;
+        x[1][1] = 0;
+        Board b = new Board(x);
+        assertEquals(4, b.manhattan());
+    }
 }

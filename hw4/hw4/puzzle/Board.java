@@ -96,19 +96,14 @@ public class Board implements WorldState {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (tileAt(i, j) != 0 && tileAt(i, j) != goal[i][j]) {
-                    estimate += helpManhattan(tileAt(i, j), goal[i][j]);
+                    int goalX = (tileAt(i, j) - 1) / N;
+                    int goalY = (tileAt(i, j) - 1) % N;
+                    estimate += abs(goalX - i) + abs(goalY - j);
+                    System.out.println(i + " " + j + " " + tileAt(i, j) + " " + goalX + " " + goalY + " " + estimate);
                 }
             }
         }
         return estimate;
-    }
-
-    private int helpManhattan(int initial, int goal) {
-        if (initial < goal) {
-            return (goal - initial) / N + (goal - initial) % N;
-        } else {
-            return (initial - goal) / N + (initial - goal) % N;
-        }
     }
 
     /**
@@ -142,13 +137,22 @@ public class Board implements WorldState {
         return false;
     }
 
+    public int hashCode() {
+        int ret = 0;
+        for (int i = 0; i < size(); i++) {
+            for (int j = 0; j < size(); i++) {
+                ret = ret * 31 + tileAt(i, j);
+            }
+        }
+        return ret;
+    }
+
     /**
      * Returns the string representation of the board. This
      * method is provided in the skeleton
      */
     public String toString() {
         StringBuilder s = new StringBuilder();
-        int N = size();
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
