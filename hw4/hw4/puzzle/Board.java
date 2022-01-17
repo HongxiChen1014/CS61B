@@ -15,7 +15,7 @@ public class Board implements WorldState {
      * tiles[i][j] = tile at row i, column j
      */
     public Board(int[][] tiles) {
-        this.N = tiles.length;
+        this.N = tiles[0].length;
         this.tiles = new int[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -33,7 +33,7 @@ public class Board implements WorldState {
 
     //Returns value of tile at row i, column j (or 0 if blank)
     public int tileAt(int i, int j) {
-        if (i >= N || j >= N) {
+        if (i < 0 || j < 0 || i >= N || j >= N) {
             throw new IndexOutOfBoundsException();
         }
         return tiles[i][j];
