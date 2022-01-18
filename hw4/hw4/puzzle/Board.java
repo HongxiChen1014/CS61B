@@ -1,7 +1,6 @@
 package hw4.puzzle;
 
-import java.util.HashSet;
-import java.util.Set;
+import edu.princeton.cs.algs4.Queue;
 
 import static java.lang.Math.abs;
 
@@ -45,8 +44,9 @@ public class Board implements WorldState {
         return N;
     }
 
+    @Override
     public Iterable<WorldState> neighbors() {
-        Set<WorldState> neighbs = new HashSet<>();
+        Queue<WorldState> neighbs = new Queue<>();
         //find blank
         int blankX = -1;
         int blankY = -1;
@@ -69,9 +69,9 @@ public class Board implements WorldState {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (abs(i - blankX) + abs(j - blankY) == 1) {
-                    newBoard[blankX][blankY] = tileAt(i, j);
+                    newBoard[blankX][blankY] = tiles[i][j];
                     newBoard[i][j] = BLANK;
-                    neighbs.add(new Board(newBoard));
+                    neighbs.enqueue(new Board(newBoard));
                     newBoard[i][j] = newBoard[blankX][blankY];
                     newBoard[blankX][blankY] = BLANK;
                 }
@@ -84,7 +84,7 @@ public class Board implements WorldState {
         int estimate = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (tileAt(i, j) != BLANK && tileAt(i, j) != goal[i][j]) {
+                if (tiles[i][j] != BLANK && tiles[i][j] != goal[i][j]) {
                     estimate += 1;
                 }
             }
@@ -120,14 +120,14 @@ public class Board implements WorldState {
         if (y == null) {
             return false;
         }
-        if (y instanceof Board) {
+        if (y.getClass() == this.getClass()) {
             Board b = (Board) y;
             if (b.size() != this.size()) {
                 return false;
             }
-            for (int i = 0; i < size(); i++) {
-                for (int j = 0; j < size(); j++) {
-                    if (tileAt(i, j) != b.tileAt(i, j)) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (b.tileAt(i, j) != tileAt(i, j)) {
                         return false;
                     }
                 }
