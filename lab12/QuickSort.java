@@ -66,20 +66,16 @@ public class QuickSort {
      */
     public static <Item extends Comparable> Queue<Item> quickSort(
             Queue<Item> items) {
-        if (items == null) {
-            return null;
+        if (items.size() == 1 || items.isEmpty()) {
+            return items;
         }
-        Queue<Item> ret = new Queue<>();
+        Queue<Item> ret;
         Queue<Item> less = new Queue<>();
         Queue<Item> equal = new Queue<>();
         Queue<Item> greater = new Queue<>();
-        if (items.size() > 1) {
-            partition(items, getRandomItem(items), less, equal, greater);
-            quickSort(less);
-            quickSort(greater);
-            ret = catenate(less, equal);
-            ret = catenate(ret, greater);
-        }
+        partition(items, getRandomItem(items), less, equal, greater);
+        ret = catenate(quickSort(less), equal);
+        ret = catenate(ret, quickSort(greater));
         return ret;
     }
 
