@@ -80,7 +80,7 @@ public class CountingSort {
         }
         int[] sorted = new int[arr.length];
         int k = 0;
-        for (int i = min; i < counts.length; i += 1) {
+        for (int i = min; i < max + 1; i += 1) {
             for (int j = 0; j < counts[i - min]; j += 1, k += 1) {
                 sorted[k] = i;
             }
