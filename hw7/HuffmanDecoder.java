@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author daisy
@@ -7,7 +8,6 @@ import java.util.ArrayList;
  */
 public class HuffmanDecoder {
     public static void main(String[] args) {
-        /*
         String readFile = args[0];
         String writeFile = args[1];
         ObjectReader objectReader = new ObjectReader(readFile);
@@ -18,30 +18,13 @@ public class HuffmanDecoder {
         while (hugeSequence.length() != 0) {
             Match m = trie.longestPrefixMatch(hugeSequence);
             decodes.add(m.getSymbol());
-            hugeSequence.allButFirstNBits(m.getSequence().length());
+            hugeSequence = hugeSequence.allButFirstNBits(m.getSequence().length());
         }
         char[] res = new char[decodes.size()];
         for (int i = 0; i < decodes.size(); i++) {
             res[i] = decodes.get(i);
         }
         FileUtils.writeCharArray(writeFile, res);
-*/
-        String readFile = args[0];
-        String writeFile = args[1];
 
-        ObjectReader objectReader = new ObjectReader(readFile);
-        BinaryTrie trie = (BinaryTrie) objectReader.readObject();
-        BitSequence hugeSequence = (BitSequence) objectReader.readObject();
-        ArrayList<Character> symbols = new ArrayList<>();
-        while (hugeSequence.length() != 0) {
-            Match m = trie.longestPrefixMatch(hugeSequence);
-            symbols.add(m.getSymbol());
-            hugeSequence = hugeSequence.allButFirstNBits(m.getSequence().length());
-        }
-        char[] chars = new char[symbols.size()];
-        for (int i = 0; i < symbols.size(); i++) {
-            chars[i] = symbols.get(i);
-        }
-        FileUtils.writeCharArray(writeFile, chars);
     }
 }
